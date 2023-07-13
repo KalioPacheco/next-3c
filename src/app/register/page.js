@@ -2,12 +2,14 @@
 import React from "react"
 import "./login.css"
 import { register } from "../../services/firebase/auth";
+import {Stack, TextField} from "@mui/material"
 
 export default function Register() {
 
     const [state, setState] = React.useState({
         email: "",
-        password: ""
+        password: "",
+        displayName: ""
     });
     
     function onChange(event) {
@@ -19,24 +21,67 @@ export default function Register() {
         })
     }
 
-    function onRegister() {
+    function onRegister(event) {
+        event.preventDefault();        
+
         // const email = state.email;
         // const password = state.password;
 
-        const {email, password} = state;
+        const {email, password, displayName} = state;
 
-        register(email, password);
+        const args = {
+            email,
+            password,
+            displayName
+        }
+
+        register(args);
     }
 
     return (
-        <div className="container">
+        <Stack>
 
-            <input name="email" onChange={onChange} value={state.email} placeholder="email" type="text" />
+            <form onSubmit={onRegister}>
+                <Stack
+                    direction="column"
+                    spacing={1}
+                    width="300px"
+                    p={2}
+                >
 
-            <input name="password" onChange={onChange} value={state.password} placeholder="123456" type="password" />
+                    <TextField 
+                        required 
+                        name="email" 
+                        onChange={onChange} 
+                        type="email" 
+                        value={state.email} 
+                        label="Email" 
+                        variant="outlined" 
+                    />
 
-            <button onClick={onRegister}>Register</button>
-        </div>
+                <input 
+                    name="password" 
+                    onChange={onChange} 
+                    value={state.password} 
+                    placeholder="123456" 
+                    type="password" 
+                    required
+                />
+
+                <input 
+                    name="displayName" 
+                    onChange={onChange} 
+                    value={state.displayName} 
+                    placeholder="Tú nombre" 
+                    type="text" 
+                    required
+                />
+
+                <button type="submit">Register</button>
+                </Stack>
+            </form>
+
+        </Stack>
     )
 
 }
